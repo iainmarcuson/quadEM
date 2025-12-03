@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <math.h>
 #include <cstdint>
+#include <ctype.h>
 
 #include <epicsTypes.h>
 #include <epicsTime.h>
@@ -81,6 +82,8 @@
 #define TXC_CHC_CALIB_OFFSET    106
 #define TXC_CHD_CALIB_OFFSET    107
 
+#define BIAS_V_REG              81
+#define BIAS_I_REG              83
 typedef enum {
     kGET_CMD_NAME,
     kPARSE_NAME,
@@ -181,6 +184,9 @@ drvT4UDirect_EM::drvT4UDirect_EM(const char *portName, const char *T4U_Address, 
     createParam(P_PIDCtrlEx_String, asynParamInt32, &P_PIDCtrlEx);
     createParam(P_WaitStateMode_String, asynParamInt32, &P_WaitStateMode);
     createParam(P_ReadsPerPacket_String, asynParamInt32, &P_ReadsPerPacket);
+    createParam(P_BiasQuery_String, asynParamInt32, &P_BiasQuery);
+    createParam(P_BiasVoltage_String, asynParamInt32, &P_BiasVoltage);
+    createParam(P_BiasCurrent_String, asynParamInt32, &P_BiasCurrent);
 #include "gc_t4u_cpp_params.cpp"
     
     // Create the port names
@@ -641,6 +647,14 @@ asynStatus drvT4UDirect_EM::writeInt32(asynUser *pasynUser, epicsInt32 value)
         epicsSnprintf(outCmdString_, sizeof(outCmdString_), "wr %i %i\r\n", (int) REG_T4U_READS_PER_PACKET, value);
         writeReadMeter();
     }
+    else if (function == P_BiasQuery)
+    {
+        //printf("Doing a query of the bias.\n"); // DEBUGGING
+        epicsSnprintf(outCmdString_, sizeof(outCmdString_), "rr %i\r\n", (int) BIAS_V_REG);
+        writeReadMeter();
+        epicsSnprintf(outCmdString_, sizeof(outCmdString_), "rr %i\r\n", (int) BIAS_I_REG);
+        writeReadMeter();
+    }
             
 
     if (function < FIRST_T4U_COMMAND)
@@ -1017,7 +1031,39 @@ void drvT4UDirect_EM::cmdReadThread(void)
 
         if (parseState == kEXEC_ASC_CMD) // We received an ASCII command to parse
         {
-            //-=-= FIXME TODO Decide if we want to support this
+            int char_parsed;
+            uint32_t reg_num;
+            int32_t reg_val;
+            int items_read;
+            char suffix[5] = {'\0', '\0', '\0', '\0', '\0'};;
+
+            // Check for an rr, since that is one we process.
+            sscanf(InData, "rr %n", &char_parsed);
+            if (char_parsed >= 3) // An rr command
+            {
+                items_read = sscanf(InData, "rr %u > %i%n",
+                                    &reg_num, &reg_val, &char_parsed);
+                if (items_read == 2) // Found both values
+                {
+                    //printf("Found an rr command for reg %u.\n", reg_num); // DEBUGGING
+                    sscanf(InData+char_parsed, "%4c", suffix);
+                    //printf("Command suffix is \"%s\"\n", suffix);
+                    if ((suffix[0] == ':') && (suffix[1] == 'O')
+                        && (suffix[2] == 'K')) // We have a full command
+                    {
+                        if (reg_num == BIAS_V_REG)
+                        {
+                            //printf("Setting BiasV\n"); // DEBUGGING
+                            setIntegerParam(P_BiasVoltage, reg_val);
+                        }
+                        if (reg_num == BIAS_I_REG)
+                        {
+                            //printf("Setting BiasI\n"); // DEBUGGING
+                            setIntegerParam(P_BiasCurrent, reg_val);
+                        }       
+                    }
+                }
+            }
         }
         else if (parseState == kFLUSH) // We had an error somewhere
         {

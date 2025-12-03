@@ -442,6 +442,37 @@ record(longin, "$(P)$(R)ReadsPerPacket_RBV")
     field(SCAN, "I/O Intr")
 }
 
+
+record(longout, "$(P)$(R)BiasQ")
+{
+    field(DTYP, "asynInt32")
+    field(OUT, "@asyn($(PORT) 0)QE_BIAS_QUERY")
+    field(PINI, "YES")
+    field(VAL, "1")
+    field(SCAN, "2 second")
+}
+
+record(longin, "$(P)$(R)BiasQ_RBV")
+{
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(PORT) 0)QE_BIAS_QUERY")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(P)$(R)BiasV_RBV")
+{
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(PORT) 0)QE_BIASV")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(P)$(R)BiasI_RBV")
+{
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(PORT) 0)QE_BIASI")
+    field(SCAN, "I/O Intr")
+}
+
 #--------------------------
 # Overrides
 #--------------------------

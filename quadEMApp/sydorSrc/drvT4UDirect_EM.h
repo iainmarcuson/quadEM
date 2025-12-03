@@ -44,7 +44,9 @@
 #define P_PIDCtrlEx_String "QE_PID_EXT_CTRL"
 #define P_WaitStateMode_String "QE_WSMODE"
 #define P_ReadsPerPacket_String "QE_RPP"
-
+#define P_BiasQuery_String "QE_BIAS_QUERY"
+#define P_BiasVoltage_String "QE_BIASV"
+#define P_BiasCurrent_String "QE_BIASI"
 #include "gc_t4u_hdr_string.h"
 
 typedef struct {
@@ -147,6 +149,9 @@ protected:
     int P_PIDCtrlEx;
     int P_WaitStateMode;
     int P_ReadsPerPacket;
+    int P_BiasQuery;
+    int P_BiasVoltage;
+    int P_BiasCurrent;
 #include "gc_t4u_hdr_member.h"
 
     /* These are the methods we implement from quadEM */

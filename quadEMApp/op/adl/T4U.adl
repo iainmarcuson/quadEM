@@ -1,6 +1,6 @@
 
 file {
-	name="/home/iainm/src/epics/synAppsofficial/git/support/quadEM/quadEMApp/op/adl/T4U.adl"
+	name="/home/iainm/src/epics/synAppsofficial/git/support/quadEM/quadEMApp/op/adl/./T4U.adl"
 	version=030122
 }
 display {
@@ -174,46 +174,6 @@ menu {
 }
 text {
 	object {
-		x=6
-		y=91
-		width=130
-		height=24
-	}
-	"basic attribute" {
-		clr=14
-	}
-	textix="Pulse Bias Enable"
-}
-menu {
-	object {
-		x=140
-		y=85
-		width=124
-		height=23
-	}
-	control {
-		chan="$(P)$(R)PulseBiasEn"
-		clr=14
-		bclr=4
-	}
-}
-"text update" {
-	object {
-		x=274
-		y=85
-		width=119
-		height=22
-	}
-	monitor {
-		chan="$(P)$(R)PulseBiasEn_RBV"
-		clr=54
-		bclr=4
-	}
-	limits {
-	}
-}
-text {
-	object {
 		x=5
 		y=114
 		width=126
@@ -295,4 +255,149 @@ text {
 	}
 	limits {
 	}
+}
+menu {
+	object {
+		x=134
+		y=207
+		width=124
+		height=23
+	}
+	control {
+		chan="$(P)$(R)PulseBiasEn"
+		clr=14
+		bclr=4
+	}
+}
+"text update" {
+	object {
+		x=268
+		y=207
+		width=119
+		height=22
+	}
+	monitor {
+		chan="$(P)$(R)PulseBiasEn_RBV"
+		clr=54
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=0
+		y=213
+		width=130
+		height=24
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Pulse Bias Enable"
+}
+text {
+	object {
+		x=2
+		y=185
+		width=130
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Bias Enable"
+}
+menu {
+	object {
+		x=136
+		y=181
+		width=117
+		height=21
+	}
+	control {
+		chan="$(P)$(R)BiasPEn"
+		clr=14
+		bclr=4
+	}
+}
+"text update" {
+	object {
+		x=267
+		y=185
+		width=118
+		height=17
+	}
+	monitor {
+		chan="$(P)$(R)BiasPEn"
+		clr=54
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=239
+		width=116
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+}
+text {
+	object {
+		x=5
+		y=245
+		width=118
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Bias Voltage"
+}
+"text update" {
+	object {
+		x=133
+		y=241
+		width=123
+		height=22
+	}
+	monitor {
+		chan="$(P)$(R)BiasV_RBV"
+		clr=54
+		bclr=4
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=133
+		y=263
+		width=123
+		height=21
+	}
+	monitor {
+		chan="$(P)$(R)BiasI_RBV"
+		clr=54
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=264
+		width=108
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Bias Current"
 }
